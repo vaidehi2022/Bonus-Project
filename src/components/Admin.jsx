@@ -96,7 +96,7 @@ export default function Admin() {
             placeholder="Add new question"
             className="input-que"
           />
-          <h2>Add answers</h2>
+          <h2>Add Options</h2>
           <div>
             <input
               type="text"
