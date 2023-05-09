@@ -1,0 +1,15 @@
+
+.student-right-section {
+    background-color: green;
+    margin-left: 25%;
+    width: 50%;
+    height: 35rem;
+    margin-top: 3rem;
+    overflow-y: scroll;
+}
+
+.student-hTwo-data {
+    text-align: center;
+    font-size: 2.5rem;
+
+}

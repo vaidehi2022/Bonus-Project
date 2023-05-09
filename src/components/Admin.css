@@ -1,0 +1,46 @@
+.admin_h1 {
+    text-align: center;
+}
+
+.input-que {
+    padding: .3rem;
+    width: 20rem;
+    text-align: center;
+}
+
+.second-div {
+    display: flex;
+    justify-content: space-around;
+}
+
+.left-section {
+
+    background-color: blue;
+    text-align: center;
+    /* margin-left: 20%; */
+    margin-top: 5rem;
+}
+
+.btn {
+    background-color: rgb(69, 139, 0);
+    padding: .5rem;
+    border-radius: .7rem;
+}
+
+.input-ans {
+    padding: .3rem;
+}
+
+.right-section {
+    background-color: green;
+    width: 50%;
+    height: 35rem;
+    margin-top: 3rem;
+    overflow-y: scroll;
+}
+
+.hTwo-data {
+    text-align: center;
+    font-size: 2.5rem;
+
+}
