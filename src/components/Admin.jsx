@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import "./Admin.css";
 import { Link } from "react-router-dom";
+import QuestionsAnswers from "./QuestionsAnswers";
 
 import { useRecoilState } from "recoil";
 import {
@@ -11,40 +12,45 @@ import {
   ans4State,
   arrState,
 } from "../atoms/atom";
-import QuestionsAnswers from "./QuestionsAnswers";
 
 export default function Admin() {
   const [question, setQuestion] = useRecoilState(questionState);
-
   const [firstOption, setFirstOption] = useRecoilState(ans1State);
   const [secondOption, setSecondOption] = useRecoilState(ans2State);
   const [thirdOption, setThirdOption] = useRecoilState(ans3State);
   const [fourthOption, setFourthOption] = useRecoilState(ans4State);
-
   const [arr, setArr] = useRecoilState(arrState);
+
+  const [editMode, setEditMode] = useState(false);
+  const [editIndex, setEditIndex] = useState(null);
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (
-      (!question ||
-        !firstOption ||
-        !secondOption ||
-        !thirdOption ||
-        !fourthOption) == ""
-    ) {
-      // Create a new question object
-      const newQuestion = {
-        question: question,
-        options: [firstOption, secondOption, thirdOption, fourthOption],
-      };
-
-      // Add the new question object to the arr array
-      setArr([...arr, newQuestion]);
-    } else {
-      alert("please fill each input box");
+    if (!question || !firstOption || !secondOption || !thirdOption || !fourthOption) {
+      alert("Please fill in all input boxes.");
+      return;
     }
-    // Reset the form values
+
+    const newQuestion = {
+      question: question,
+      options: [firstOption, secondOption, thirdOption, fourthOption],
+      // correctanswer : 
+    };
+
+    if (editMode) {
+      // Update existing question
+      const updatedArr = [...arr];
+      updatedArr[editIndex] = newQuestion;
+      setArr(updatedArr);
+      setEditMode(false);
+      setEditIndex(null);
+    } else {
+      // Add new question
+      setArr([...arr, newQuestion]);
+    }
+
+    // Reset form values
     setQuestion("");
     setFirstOption("");
     setSecondOption("");
@@ -52,14 +58,33 @@ export default function Admin() {
     setFourthOption("");
   };
 
+  const handleEditClick = (index) => {
+    setEditMode(true);
+    setEditIndex(index);
+
+    const { question, options } = arr[index];
+    setQuestion(question);
+    setFirstOption(options[0]);
+    setSecondOption(options[1]);
+    setThirdOption(options[2]);
+    setFourthOption(options[3]);
+  };
+
+  const handleDeleteClick = (index) => {
+    const updatedArr = [...arr];
+    updatedArr.splice(index, 1);
+    setArr(updatedArr);
+  };
+
   return (
     <>
-      <div style={{textAlign:'center', fontSize:'2rem'}}>
-        <Link to="/" className="admin_Link" style={{color:'yellow'}}>
+      <div style={{ textAlign: "center", fontSize: "2rem" }}>
+        <Link to="/" className="admin_Link" style={{ color: "yellow" }}>
           Admin Portal
         </Link>{" "}
-        
-        <Link to="/student" style={{color:'yellow'}}>Student Portal</Link>
+        <Link to="/student" style={{ color: "yellow" }}>
+          Student Portal
+        </Link>
       </div>
       <div className="second-div">
         <section className="left-section">
@@ -68,14 +93,14 @@ export default function Admin() {
             type="text"
             value={question}
             onChange={(e) => setQuestion(e.target.value)}
-            placeholder="add new questions"
+            placeholder="Add new question"
             className="input-que"
           />
           <h2>Add answers</h2>
           <div>
             <input
               type="text"
-              placeholder="add first options"
+              placeholder="Add first option"
               className="input-ans"
               value={firstOption}
               onChange={(e) => setFirstOption(e.target.value)}
@@ -85,7 +110,8 @@ export default function Admin() {
           <div>
             <input
               type="text"
-              placeholder="add second options"
+              placeholder="Add second option"
+             
               className="input-ans"
               value={secondOption}
               onChange={(e) => setSecondOption(e.target.value)}
@@ -95,7 +121,7 @@ export default function Admin() {
           <div>
             <input
               type="text"
-              placeholder="add third options"
+              placeholder="Add third option"
               className="input-ans"
               value={thirdOption}
               onChange={(e) => setThirdOption(e.target.value)}
@@ -105,7 +131,7 @@ export default function Admin() {
           <div>
             <input
               type="text"
-              placeholder="add fourth options"
+              placeholder="Add fourth option"
               className="input-ans"
               value={fourthOption}
               onChange={(e) => setFourthOption(e.target.value)}
@@ -114,13 +140,26 @@ export default function Admin() {
           <br />
 
           <button className="btn" onClick={handleSubmit}>
-            Submit
+            {editMode ? "Update" : "Submit"}
           </button>
         </section>
 
         <section className="right-section">
           <h2 className="hTwo-data">Quiz Data</h2>
-          <QuestionsAnswers />
+          {arr.map((item, index) => (
+            <div key={index} className="question-item">
+              <p>Question: {item.question}</p>
+              <ul>
+                {item.options.map((option, i) => (
+                  <li 
+                  key={i}>Option {i + 1}: {option}
+                  </li>
+                ))}
+              </ul>
+              <button onClick={() => handleEditClick(index)}>Edit</button>
+              <button onClick={() => handleDeleteClick(index)}>Delete</button>
+            </div>
+          ))}
         </section>
       </div>
     </>
