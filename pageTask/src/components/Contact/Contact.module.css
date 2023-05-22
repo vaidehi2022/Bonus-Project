@@ -1,0 +1,21 @@
+
+
+.main_container{
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    flex-direction: column;
+    border: 2px solid white;
+    border-radius: 2rem;
+    width: 28rem;
+    padding: 1.8rem;
+    margin-left: 35rem;
+    margin-top: 1rem;
+}
+
+.error{
+    color: red;
+
+}
+
+
